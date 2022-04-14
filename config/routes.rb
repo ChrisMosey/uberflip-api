@@ -10,9 +10,7 @@ Rails.application.routes.draw do
   put "employees/:user_id", to: "users#update_user"
   delete "employees/:user_id", to: "users#delete_user"
 
-  namespace "timesheets" do
-    get "/", to: "timesheets#get_timesheets"
-    post "clock_in", to: "timesheets#clock_in"
-    post "clock_out", to: "timesheets#clock_out"
-  end
+  get "timesheets", to: "timesheets#get_timesheets"
+  post "timesheets/:user_id/clock_in", to: "timesheets#clock_in"
+  post "timesheets/:user_id/clock_out", to: "timesheets#clock_out"
 end
