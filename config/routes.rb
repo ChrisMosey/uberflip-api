@@ -4,13 +4,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  namespace "employees" do
-    get "/", to: "users#get_users"
-    post "/", to: "users#create_user"
-    get ":user_id", to: "users#get_user"
-    patch ":user_id", to: "users#update_user"
-    delete ":user_id", to: "users#delete_user"
-  end
+  get "employees", to: "users#get_users"
+  post "employees", to: "users#create_user"
+  get "employees/:user_id", to: "users#get_user"
+  put "employees/:user_id", to: "users#update_user"
+  delete "employees/:user_id", to: "users#delete_user"
 
   namespace "timesheets" do
     get "/", to: "timesheets#get_timesheets"
