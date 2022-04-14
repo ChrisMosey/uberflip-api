@@ -1,8 +1,16 @@
 class UsersController < ApplicationController
   def get_users
     limit = params[:limit] || 10
+    first_name = params[:first_name]
+    last_name = params[:last_name]
+
+    args = {}
+    args[:first_name] = first_name unless first_name.blank?
+    args[:last_name] = last_name unless last_name.blank?
 
     users = User.limit(limit)
+
+    users = users.where(**args) unless args.blank?
 
     render json: users, status: 200
   end

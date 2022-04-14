@@ -13,7 +13,7 @@ RSpec.describe "Employees", type: :request do
     end
 
     it "returns limited employees" do
-      unique_sin_numbers = [
+      unique_sin_numbers = [ # should be in a helper file
         862536414,
         138152798,
         934679382,
@@ -57,6 +57,43 @@ RSpec.describe "Employees", type: :request do
       response_body = JSON.parse(response.body)
 
       expect(response_body.count).to eq(10)
+    end
+
+    it "searches by first name" do
+      create(:user)
+      create(:user, first_name: "fred", sin: 443392949)
+
+      get "/employees", params: { first_name: "fred" }
+      expect(response).to have_http_status(:success)
+
+      response_body = JSON.parse(response.body)
+
+      expect(response_body.count).to eq(1)
+    end
+
+    it "searches by last name" do
+      create(:user)
+      create(:user, last_name: "jones", sin: 443392949)
+
+      get "/employees", params: { last_name: "jones" }
+      expect(response).to have_http_status(:success)
+
+      response_body = JSON.parse(response.body)
+
+      expect(response_body.count).to eq(1)
+    end
+
+    it "searches by first name and limits results" do
+      create(:user)
+      create(:user, first_name: "fred", sin: 443392949)
+      create(:user, first_name: "fred", sin: 192260636)
+
+      get "/employees", params: { first_name: "fred", limit: 1 }
+      expect(response).to have_http_status(:success)
+
+      response_body = JSON.parse(response.body)
+
+      expect(response_body.count).to eq(1)
     end
   end
 
