@@ -1,24 +1,36 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Api Docs
 
-Things you may want to cover:
+[https://documenter.getpostman.com/view/1099492/Uyr5myEe](https://documenter.getpostman.com/view/1099492/Uyr5myEe)
 
-* Ruby version
 
-* System dependencies
+## Changed files
 
-* Configuration
+* `app/controllers/users_controller.rb`
+* `app/controllers/timesheets_controller.rb`
+* `app/models/user.rb`
+* `app/models/timesheet.rb`
+* `db/migrate/*`
+* `lib/exceptions.rb`
+* `spec/factories/users.rb`
+* `spec/factories/timesheets.rb`
+* `spec/requests/users_controller_spec.rb`
+* `spec/requests/timesheet_controller_spec.rb`
 
-* Database creation
+## Set up
+run `docker-compose build` followed by `docker-compose up`
+## DB Schema
 
-* Database initialization
+## Developers Notes
+### Date time fields
+I relized before the end that the date time fields should have been using a unix time stamp. This would have made saving, and searching much easier. Converting to a unix time stamp on the front end would not have been hard, and as it currently stands, the application does not take time zones into account. Searching between dates would have also been easier.
 
-* How to run the test suite
+### SIN Number
+I originally set the sin number as a number type thinking it would be easer to do equasions on the number, but I discovered that it will error if the number starts with 0. Because of this, the sin number should be sent as a string, and have spaces removed before looping through, and converting the indidual characters to numbers. I would have to check each character however to make sure it is a number and not something else, though I could probably do that as a regex before looping though.
 
-* Services (job queues, cache servers, search engines, etc.)
+### Updating a user
+I didn't include all of the tests for this endpoint. Since this isn't going to be launched, and they would be checking the exact same thing as create, I decided to make a not of it here instead.
 
-* Deployment instructions
-
-* ...
+### Get all timesheets
+There were a few different ways to go about this. I decided to go a simpler way, and just list all time sheet data with user data in the same row. But a better way to have done this would be to loop through the user data, and group all the timesheet data with the users themselves.

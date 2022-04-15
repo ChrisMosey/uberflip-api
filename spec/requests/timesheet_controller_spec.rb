@@ -56,7 +56,7 @@ RSpec.describe "Employees", type: :request do
       create(:timesheet, start: Time.now.yesterday)
       create(:timesheet, start: Time.now.days_ago(3), user: create(:user, sin: 934679382))
 
-      get "/timesheets", params: { start_datetime: Time.now.days_ago(2), end_datetime: Time.now }
+      get "/timesheets", params: { from_datetime: Time.now.days_ago(2), to_datetime: Time.now }
 
       expect(response).to have_http_status(:success)
 

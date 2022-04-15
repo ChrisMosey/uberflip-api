@@ -2,8 +2,8 @@ require 'exceptions'
 class TimesheetsController < ApplicationController
   def get_timesheets
     user_id = params[:employee_id]
-    start_datetime = params[:start_datetime]
-    end_datetime = params[:end_datetime]
+    from_datetime = params[:from_datetime]
+    to_datetime = params[:to_datetime]
     limit = params[:limit] || 10
 
     args = {}
@@ -12,7 +12,7 @@ class TimesheetsController < ApplicationController
     # should make it not dependant on both start and end date
     # if start is blank, check beginning of time to end
     # if end is blank, start date to end of time
-    args[:start] = start_datetime..end_datetime unless start_datetime.blank?
+    args[:start] = from_datetime..to_datetime unless from_datetime.blank?
 
     timesheets = Timesheet.limit(limit)
 
@@ -48,7 +48,7 @@ class TimesheetsController < ApplicationController
     user = User.find_by(id: user_id)
     raise Exceptions::UserNotFoundError if user.blank?
 
-    last_timesheet = Timesheet.find_by(user_id: user_id)
+    last_timesheet = Timesheet.where(user_id: user_id).last
     raise Exceptions::TimesheetNotValidError if (last_timesheet && last_timesheet.end.blank?)
 
     timesheet = Timesheet.create(user_id: user_id, start: Time.now)
@@ -66,12 +66,13 @@ class TimesheetsController < ApplicationController
     user = User.find_by(id: user_id)
     raise Exceptions::UserNotFoundError if user.blank?
 
-    last_timesheet = Timesheet.find_by(user_id: user_id)
+    last_timesheet = Timesheet.where(user_id: user_id).last
     raise Exceptions::TimesheetNotValidError unless last_timesheet.end.blank?
 
-    timesheet = Timesheet.create(user_id: user_id, end: Time.now)
+    last_timesheet.end = Time.now
+    last_timesheet.save!
 
-    render json: timesheet, status: 200
+    render json: last_timesheet, status: 200
   rescue Exceptions::UserNotFoundError
     render json: { message: "User not Found" }, status: 404
   rescue Exceptions::TimesheetNotValidError
