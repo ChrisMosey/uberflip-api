@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :last_name
       t.string :email
       t.float :hourly_wage
-      t.integer :sin
+      t.string :sin
 
       t.timestamps
     end

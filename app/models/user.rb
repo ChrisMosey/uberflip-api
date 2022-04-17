@@ -2,10 +2,9 @@ class SinValidator < ActiveModel::Validator
   SIN_LENGTH = 9
   def validate(record)
     sin = record.sin
-    raise StandardError if sin.blank? || sin.to_s.length != SIN_LENGTH
-
+    raise StandardError if sin.blank? || sin.length != SIN_LENGTH
     sin_sum = 0
-    sin.to_s.split("").each_with_index do |num_str, index|
+    sin.split("").each_with_index do |num_str, index|
       num = num_str.to_i
 
       multiplier = (index + 1)%2 == 0 ? 2 : 1
@@ -30,6 +29,6 @@ class User < ApplicationRecord
   validates :last_name, :presence => true
   validates :email, :presence => true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :hourly_wage, :presence => true, numericality: true
-  validates :sin, uniqueness: true # apparently doing it as a number doesnt allow for sins that start with 0. Should have been done using strings
+  validates :sin, uniqueness: true
   validates_with SinValidator
 end

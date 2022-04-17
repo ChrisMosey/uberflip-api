@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_14_013538) do
     t.string "last_name"
     t.string "email"
     t.float "hourly_wage"
-    t.integer "sin"
+    t.string "sin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
